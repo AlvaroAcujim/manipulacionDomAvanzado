@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css"/>
+    <script src="index.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <main class="main">
+        <section class="main__container">
+            <h1>Manipulación del DOM</h1>
+            <div class="main__container__section">
+                <h2>Crear, insertar, eliminar, reemplazar elementos</h2>
+                <div class="main__container__section__buttonsAction">
+                    <button class="main__container__section__buttonsAction__button crear__elemento" id="create">Crear Elemento</button>
+                    <button class="main__container__section__buttonsAction__button Insercion" id="insertBefore">Insertar Antes</button>
+                    <button class="main__container__section__buttonsAction__button Insercion" id="insertAfter">Insertar Después</button>
+                    <button class="main__container__section__buttonsAction__button Insercion" id="insertStart">Al Inicio</button>
+                    <button class="main__container__section__buttonsAction__button Insercion" id="insertEnd">Al Final</button>
+                    <button class="main__container__section__buttonsAction__button eliminacion" id="delete">Eliminar</button>
+                    <button class="main__container__section__buttonsAction__button remplazo" id="replace">Remplazar Elemento</button>
+                </div>
+                <div class="main__container__section__buttonsAction__button__titles" id="contentTitles">
+                    <label for="NombreElemento">Escriba el nombre del elemento</label>
+                    <input type="text" id="text">
+                    <h2 id="msg">Cliquea para seleccionar</h2>
+                </div>
+                <div class="main__container__section__buttonsAction__button__itemsContainer" id="contentItems">
+                    <div class="main__container__section__buttonsAction__button__itemsContainer__items" id="item1">
+                        <p class="main__container__section__buttonsAction__button__itemsContainer__items__paragraph">Primer elemento</p>
+                    </div>
+                    <div class="main__container__section__buttonsAction__button__itemsContainer__items" id="item2">
+                        <p class="main__container__section__buttonsAction__button__itemsContainer__items__paragraph">Segundo elemento</p>
+                    </div>
+                    <div class="main__container__section__buttonsAction__button__itemsContainer__items" id="item3">
+                        <p class="main__container__section__buttonsAction__button__itemsContainer__items__paragraph">Tercero elemento</p>
+                    </div>
+                    <div class="main__container__section__buttonsAction__button__itemsContainer__items" id="item4">
+                        <p class="main__container__section__buttonsAction__button__itemsContainer__items__paragraph">Cuarto elemento</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>
