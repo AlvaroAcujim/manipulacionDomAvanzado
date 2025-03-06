@@ -90,60 +90,47 @@ const createItemAndAddEnd = (input) => {
 const addStartItem = (input) => {
     contentItems.prepend(createNode(input));
 };
+
 const addBeforeItem = (id ,input) => {
-    if(document.getElementById(id)){ //si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
         contentItems.insertBefore(createNode(input), getNodeRef(id));
-    } else{
-        alert('Seleccione un elemento para agregar antes');
-    };
+    
 };
+
 const addAfterItem = (id ,input) => {
-    if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
         contentItems.insertBefore(createNode(input), getNodeRef(id).nextSibling);
-    } else{
-        alert('Seleccione un elemento para agregar despues')
-    };
 };
 
 const deleteItem = (id) => {
-    if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
         const node = document.getElementById(id);
         for(let el of itemsList){
             if(el.getAttribute('id') === node.getAttribute('id')){
                 el.remove();
             };
         };
-    } else{
-        alert('Seleccione un elemento para borrar')
-    };
-   
-};
-const replaceItem = (id, input) => {
-    if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
-        contentItems.replaceChild(createNode(input), getNodeRef(id));
-    } else{
-        alert('Seleccione un elemento remplazarlo')
-    };
 };
 
-//Event listener de cada boton, todo esto podria meterse en un solo bloque [create, addEnd, addStart, addBefore, addAfter, replace];
+const replaceItem = (id, input) => {
+        contentItems.replaceChild(createNode(input), getNodeRef(id)); 
+};
+
+//Event listener de cada boton, todo esto podria meterse en un solo bloque [create, addEnd, addStart, addBefore, addAfter, replace]; replace, delete, addafter y addbefor
 arrayButtons.forEach(el => {
     el.addEventListener('click', () => {
         if(valueInput){ //comprueba que tenga valor el input
-            switch(el){
-                case create: createItemAndAddEnd(valueInput);
-                break;
-                case addEnd: createItemAndAddEnd(valueInput);
-                break;
-                case addStart: addStartItem(valueInput);
-                break;
-                case addBefore: addBeforeItem(itemSelected, valueInput);
-                break;
-                case addAfter:  addAfterItem(itemSelected, valueInput);
-                break;
-                case replace: replaceItem(itemSelected, valueInput);
-                break;
-            };
+                switch(el){
+                    case create: createItemAndAddEnd(valueInput);
+                    break;
+                    case addEnd: createItemAndAddEnd(valueInput);
+                    break;
+                    case addStart: addStartItem(valueInput);
+                    break;
+                    case addBefore: itemSelected ? addBeforeItem(itemSelected, valueInput) : alert('Seleccione un div') //si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
+                    break;
+                    case addAfter:  itemSelected ? addAfterItem(itemSelected, valueInput) : alert('Seleccione un div')
+                    break;
+                    case replace: itemSelected ? replaceItem(itemSelected, valueInput) : alert('Seleccione un div')
+                    break;
+                };
             addListenerDivs();
         }else{
             alert('Escriba en el input');
@@ -152,4 +139,4 @@ arrayButtons.forEach(el => {
     });
 });
 
-remove.addEventListener('click', () => deleteItem(itemSelected));
+remove.addEventListener('click', () => itemSelected ? deleteItem(itemSelected) : alert('Seleccione un div'));
