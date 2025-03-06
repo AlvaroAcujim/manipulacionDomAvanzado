@@ -10,7 +10,8 @@ const itemsList = document.getElementsByClassName('main__container__section__but
 const itemsParagraph = document.getElementsByClassName('main__container__section__buttonsAction__button__itemsContainer__items__paragraph');
 const itemsTitles = document.getElementById('contentTitles')
 const input = document.getElementById('text');
-
+let valueInput = '';
+const arrayButtons = [create, addEnd, addStart, addBefore, addAfter, replace];
 let itemSelected = '';
 let countElement = itemsList.length;
 
@@ -18,8 +19,11 @@ let countElement = itemsList.length;
 
 
 
-// --- Metodo para agregar listener a los divs recogiendo su id, tambien introduce un h3 con el div seleccionado y borra el h3 original
 
+input.addEventListener('input', () => {
+    valueInput = input.value;
+})
+// --- Metodo para agregar listener a los divs recogiendo su id, tambien introduce un h3 con el div seleccionado y borra el h3 original
 const addListenerDivs = () => {
     for(let el of itemsList){
         el.addEventListener('click', ev => {
@@ -31,7 +35,7 @@ const addListenerDivs = () => {
                 const txt = document.createTextNode('Ha seleccionado el elemento: ' + ev.target.children[0].textContent);
                 const h3 = document.createElement('h3');
                 h3.append(txt);
-                h3.setAttribute('id', 'msg')
+                h3.setAttribute('id', 'msg');
                 itemsTitles.append(h3);
                 for(let el of itemsList){
                     if((el.getAttribute('id') === itemSelected)){
@@ -52,6 +56,7 @@ const addListenerDivs = () => {
 addListenerDivs();
 
 //Metodo para crear un node element de tipo div con el texto que incluyamos en el input
+
 const createNode = (input) => {
     countElement += 1;
     const txt = document.createTextNode(input);
@@ -62,44 +67,43 @@ const createNode = (input) => {
     div.append(paragraph);
     div.setAttribute('class', 'main__container__section__buttonsAction__button__itemsContainer__items');
     div.setAttribute('id', ('item'+countElement));
-    return div
-}
+    return div;
+};
 
+ const getNodeRef = (id) => {
+    const node = document.getElementById(id);
+    let nodeRef = '';
+    for(let el of itemsList){
+        if(el.getAttribute('id') === node.getAttribute('id')){
+            nodeRef = el;
+        };
+    };
+    return nodeRef;
+};
+
+
+//Funciones individuales para cada caso
 const createItemAndAddEnd = (input) => {
     contentItems.appendChild(createNode(input)); //es necesario meterle como parametros el input, por que si no se veria como un html element object
-}
+};
 
 const addStartItem = (input) => {
     contentItems.prepend(createNode(input));
-}
+};
 const addBeforeItem = (id ,input) => {
     if(document.getElementById(id)){ //si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
-        const node = document.getElementById(id);
-        let nodeRef = '';
-        for(let el of itemsList){
-            if(el.getAttribute('id') === node.getAttribute('id')){
-                nodeRef = el;
-            };
-        };
-        contentItems.insertBefore(createNode(input), nodeRef);
+        contentItems.insertBefore(createNode(input), getNodeRef(id));
     } else{
-        alert('Seleccione un elemento para agregar antes')
-    }
-}
+        alert('Seleccione un elemento para agregar antes');
+    };
+};
 const addAfterItem = (id ,input) => {
     if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
-        const node = document.getElementById(id);
-        let nodeRef = '';
-        for(let el of itemsList){
-            if(el.getAttribute('id') === node.getAttribute('id')){
-                nodeRef = el;
-            };
-        };
-        contentItems.insertBefore(createNode(input), nodeRef.nextSibling);
+        contentItems.insertBefore(createNode(input), getNodeRef(id).nextSibling);
     } else{
         alert('Seleccione un elemento para agregar despues')
-    }
-}
+    };
+};
 
 const deleteItem = (id) => {
     if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
@@ -111,88 +115,41 @@ const deleteItem = (id) => {
         };
     } else{
         alert('Seleccione un elemento para borrar')
-    }
+    };
    
-}
+};
 const replaceItem = (id, input) => {
     if(document.getElementById(id)){//si el usuario pulsa fuera de los divs no se recoge el id por lo que se le solicita en caso de que no encuentre el elemento que lo seleccione.
-        const node = document.getElementById(id);
-        let nodeRef = '';
-        for(let el of itemsList){
-            if(el.getAttribute('id') === node.getAttribute('id')){
-                nodeRef = el;
-            };
-        };
-        contentItems.replaceChild(createNode(input), nodeRef);
+        contentItems.replaceChild(createNode(input), getNodeRef(id));
     } else{
         alert('Seleccione un elemento remplazarlo')
-    }
-}
+    };
+};
 
-
-create.addEventListener('click', () => {
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        createItemAndAddEnd(valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-    
+//Event listener de cada boton, todo esto podria meterse en un solo bloque [create, addEnd, addStart, addBefore, addAfter, replace];
+arrayButtons.forEach(el => {
+    el.addEventListener('click', () => {
+        if(valueInput){ //comprueba que tenga valor el input
+            switch(el){
+                case create: createItemAndAddEnd(valueInput);
+                break;
+                case addEnd: createItemAndAddEnd(valueInput);
+                break;
+                case addStart: addStartItem(valueInput);
+                break;
+                case addBefore: addBeforeItem(itemSelected, valueInput);
+                break;
+                case addAfter:  addAfterItem(itemSelected, valueInput);
+                break;
+                case replace: replaceItem(itemSelected, valueInput);
+                break;
+            };
+            addListenerDivs();
+        }else{
+            alert('Escriba en el input');
+        };
+        
+    });
 });
-
-addEnd.addEventListener('click', () => {
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        createItemAndAddEnd(valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-    
-});
-
-addStart.addEventListener('click', () => {
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        addStartItem(valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-    
-})
-
-
-addBefore.addEventListener('click', () =>{
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        addBeforeItem(itemSelected, valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-
-});
-
-addAfter.addEventListener('click', () =>{
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        addAfterItem(itemSelected, valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-
-});
-replace.addEventListener('click', () => {
-    const valueInput = input.value;
-    if(valueInput){ //comprueba que tenga valor el input
-        replaceItem(itemSelected, valueInput);
-        addListenerDivs();
-    }else{
-        alert('Escriba en el input')
-    }
-})
 
 remove.addEventListener('click', () => deleteItem(itemSelected));
